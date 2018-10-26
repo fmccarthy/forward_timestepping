@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 26 14:13:44 2018
+
+@author: fionamccarthy
+"""
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+N=301 # number of spatial gridpoints
+
+deltax=10/(N-1) # spatial step
+
+xs=np.arange(0,10,deltax)            #    spatial grid
+u0=[np.exp(-(x-5)**2) for x in xs ]  #   initial data
+
+plt.plot(xs,u0)
+plt.title("initial data")
+plt.show()
+
+finaltime=20
+Lambda=1
+
+deltat=Lambda*deltax
+
+un=np.zeros(len(u0))
+time=0
+
+'''
+FCTS:
+'''
+while time<finaltime:
+    
+    un[1:-1]=[u0[i]+deltat *(u0[i+1]-u0[i-1])/(2*deltax) for i in np.arange(0,len(xs))[1:-1]]
+    un[0]=u0[0]+deltat*(u0[1]-u0[-2])/(2*deltax)
+    un[-1]=un[0]
+    u0=un
+    time=time+deltat
+    
+plt.plot(xs,un)
+plt.title("FTCS")
+plt.show()
+
+
+time=0
+u0=[np.exp(-(x-5)**2) for x in xs ]  #   initial data
+un=np.zeros(len(xs))
+'''
+right sided:
+'''
+while time<finaltime:
+    un[1:-1]=[u0[i]+deltat*(u0[i+1]-u0[i])/(deltax) for i in np.arange(0,len(xs))[1:-1]]
+    un[0]=u0[0]+deltat*(u0[1]-u0[-2])/(deltax)
+    un[-1]=un[0]
+    u0=un
+    time=time+deltat
+plt.plot(xs,un)
+plt.title("right sided")
+plt.show()
+
+
+time=0
+u0=[np.exp(-(x-5)**2) for x in xs ]  #   initial data
+un=np.zeros(len(xs))
+'''
+left sided:
+'''
+while time<finaltime:
+    un[1:-1]=[u0[i]+deltat*(u0[i]-u0[i-1])/(deltax) for i in np.arange(0,len(xs))[1:-1]]
+    un[0]=u0[0]+deltat*(u0[0]-u0[-2])/(deltax)
+    un[-1]=un[0]
+    u0=un
+    time=time+deltat
+plt.plot(xs,un)
+plt.title("left sided")
+plt.show()
+
+
