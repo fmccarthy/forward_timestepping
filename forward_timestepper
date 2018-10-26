@@ -30,7 +30,7 @@ un=np.zeros(len(u0))
 time=0
 
 '''
-FCTS:
+FTCS:
 '''
 while time<finaltime:
     
